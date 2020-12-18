@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Post Details</h1>
+
+<div class="card">
+  <!-- Insert photo markup below this comment -->
+  <div class="center">
+  {% for photo in jobpost.photo_set.all %}
+    <img class="responsive-img card-panel" src="{{photo.url}}">
+  {% empty %}  <!--Instead of IF Else statement: is this empty?  -->
+    <div class="teal-text center-align">No Photos Uploaded</div>
+  {% endfor %}
+</div>
+  <div class="card-content">
+    <span class="card-title">{{ jobpost.name }}</span>
+    <p>Description: {{ jobpost.description }}</p>
+    <p>Compensation: {{ jobpost.compensation }}</p>
+    <p>Helpers Requested: {{ jobpost.maxPeople }}</p>
+    <p>Date: {{ jobpost.date }}</p>
+    <p>Posted by: {{ jobpost.user }}</p>
+    <!-- <p>Applicant: {{ volonteer.JobApplicationMap_set.all }}</p> -->
+    <table>
+      <thead>
+        <tr>
+          <th>Volunteers applied:</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for volonteer in jobpost.jobapplicationmap_set.all %}
+    <tr>
+      <td>{{volonteer.user}}</td>
+      <!-- <td>{{feeding.get_meal_display}}</td> -->
+    </tr>
+    </tbody>
+  {% endfor %}
+  </table>
+  </div>
+  <div  class="card-action">
+    <!-- Choose file to Upload photo -->
+    <!-- enctype="multipart/form-data" - is sending multiple requests (photo, description. See line below) -->
+    <form action="{% url 'add_photo' jobpost.id %}" enctype="multipart/form-data" method="POST">
+      {% csrf_token %}
+      <!-- type='file' - give us an option to Choose -->
+      <input type="file" name="photo-file"> 
+      <!-- <input type="text" name="description">  - if we want add a description -->
+      <br><br>
+      <input type="submit" class="btn" value="Upload Photo">
+    </form>
+    <a href="{% url 'jobposts_update' jobpost.id %}">Edit post</a>
+    <a href="{% url 'jobposts_delete' jobpost.id %}">Delete post</a>
+  </div>
+
+</div>
+<a href="{% url 'index' %}" class="btn">Return to all listings</a>
+
+
+{% endblock %}

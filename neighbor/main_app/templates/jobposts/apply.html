@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Are you shure you would like to apply fpr this job:</h1>
+<p>User with the username: {{user.username}}</p>
+<p>would like to apply for a job following job:</p>
+<p>Name: {{jobpost.name}}</p>
+<p>id: {{jobpost.id}}</p>
+
+<!--
+    The reason we are using a form
+    When creating a record in database, common practice is to use a POST requests
+    Post request will contian a request body, which holds properties you like to save to the database
+    In this case properties we are sending are user_id and job_post_id
+-->
+<form action="{% url 'job_application_create' %}" method="POST">
+    {% csrf_token %}
+    <div style="visibility:hidden">
+        <label for="user-id">What greeting do you want to say?</label>
+        <input name="user_id" id="user-id" value="{{user.id}}">
+    </div>
+    <div style="visibility:hidden">
+        <label for="job-post-id">Who do you want to say it to?</label>
+        <input name="job_post_id" id="job-post-id" value="{{jobpost.id}}">
+    </div>
+    <div>
+        <a href="{% url 'index' %}" class="btn">Cancel and return to all listings</a>
+        <button type="submit" class="btn blue">Proceed</a>
+    </div>
+</form>
+
+
+
+{% endblock %}

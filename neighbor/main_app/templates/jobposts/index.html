@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% load crispy_forms_tags %}
+<h1>Volunteer Requests</h1>
+
+<form method='POST' action=''>{% csrf_token %}
+    {{form|crispy}}
+    <input type="submit" value='Search'/>
+</form>
+<br>
+
+<table>
+    <thead>
+        <tr>
+            <th>Request</th>
+            <th>Compensation</th>
+            <th>Dates</th>
+            <th>Volunteer requested</th>
+            <th>Posted by</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            {% for jobpost in jobposts %}
+            <td><a href="{% url 'detail' jobpost.id %}" class="teal-text">{{ jobpost.name }}</a></td>
+            <td>{{ jobpost.compensation }}</td>
+            <td>{{ jobpost.date }}</td>
+            <td>{{ jobpost.maxPeople }} </td>
+            <td><a href="{% url 'jobposts_add_application' jobpost.id %}">Apply</a></td>
+            <td>{{ jobpost.user }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+{% endblock %}
